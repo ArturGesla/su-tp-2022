@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define MAX 700
-#include <time.h>
+#define MAX 100
 
 
 
@@ -111,19 +110,6 @@ void remplir_mat(float A[MAX][MAX] , int n) {
 	}
 }
 
-void remplir_mat_rand(float A[MAX][MAX] , int n) {
-
-srand(time(NULL));
-	int i,j;
-
-	for (i=0;i<n;i++) {
-		for (j=0;j<n;j++) {
-float r=rand();
-A[i][j]=r/RAND_MAX;
-		}
-	}
-}
-
 
 
 
@@ -136,41 +122,42 @@ int main() {
 //	float A[MAX][MAX],L[MAX][MAX],U[MAX][MAX];
 	
 	printf("Veuillez entrer la valeur de n : ");
-//	if (scanf("%d",&n) !=1) printf("error");
-	n=700;
-	float A[MAX][MAX]={{1,2,3},{2,5,10},{3,10,26}};
+	if (scanf("%d",&n) !=1) printf("error");
+//	n=3;
+//	float A[MAX][MAX]={{1,2,3},{2,5,10},{3,10,26}};
 //	float A[MAX][MAX]={{1,2,3},{0,1,4},{0,0,1}};
 //	float A[MAX][MAX]={{1,0,0},{2,1,0},{3,4,1}};
 
-	float b[MAX]={5,6,7};
+//	float b[MAX]={5,6,7};
 
+float A[MAX][MAX];
 	printf("Veuillez remplir la matrice A : \n");
-//	remplir_mat_2(A , n);
-	remplir_mat_rand(A , n);
+	remplir_mat(A , n);
 
-//	afficher_mat(A,n);
-		
+	afficher_mat(A,n);
+
+float b[MAX];		
 	printf("Veuillez remplir le vecteur b : \n");
-//	remplir_vect_2(b,n);
-//	afficher_vect(b,n);	
+	remplir_vect(b,n);
+	afficher_vect(b,n);	
 	
 
 	factoriser_LU(A,L,U,n);
 	printf("Matrice L : \n");
-//	afficher_mat(L , n);
+	afficher_mat(L , n);
 	printf("Matrice U : \n");
-//	afficher_mat(U , n);
+	afficher_mat(U , n);
 	
 	printf("Solution de Ly=b: \n");
 //	resol_trig_inf( A,y,b ,n);
-//	resol_trig_inf( L,y,b ,n);
-//	afficher_vect(y,n);	
+	resol_trig_inf( L,y,b ,n);
+	afficher_vect(y,n);	
 	
 	
 	printf("Solution de Ux=y: \n");
 //	resol_trig_sup( A,x,b ,n);
-//	resol_trig_sup( U,x,y ,n);
-//	afficher_vect(x,n);
+	resol_trig_sup( U,x,y ,n);
+	afficher_vect(x,n);
 	
 	//*/
 	
