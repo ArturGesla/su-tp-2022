@@ -122,23 +122,21 @@ int main() {
 //	float A[MAX][MAX],L[MAX][MAX],U[MAX][MAX];
 	
 	printf("Veuillez entrer la valeur de n : ");
-	if (scanf("%d",&n) !=1) printf("error");
-//	n=3;
-//	float A[MAX][MAX]={{1,2,3},{2,5,10},{3,10,26}};
+//	if (scanf("%d",&n) !=1) printf("error");
+	n=3;
+	float A[MAX][MAX]={{1,2,3},{2,5,10},{3,10,26}};
 //	float A[MAX][MAX]={{1,2,3},{0,1,4},{0,0,1}};
 //	float A[MAX][MAX]={{1,0,0},{2,1,0},{3,4,1}};
 
-//	float b[MAX]={5,6,7};
+	float b[MAX]={5,6,7};
 
-float A[MAX][MAX];
 	printf("Veuillez remplir la matrice A : \n");
-	remplir_mat(A , n);
+//	remplir_mat_2(A , n);
 
 	afficher_mat(A,n);
-
-float b[MAX];		
+		
 	printf("Veuillez remplir le vecteur b : \n");
-	remplir_vect(b,n);
+//	remplir_vect_2(b,n);
 	afficher_vect(b,n);	
 	
 
