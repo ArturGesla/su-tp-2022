@@ -16,9 +16,18 @@ void factoriser_LU( float A[MAX][MAX] , float L[MAX][MAX] , float U[MAX][MAX], i
 
 
 void resol_trig_inf( float A[MAX][MAX] , float x[MAX], float b[MAX],int n) {
-	int i,k;
+//	int i,k;
 	
 	//la descente à faire
+for (int i=0; i<n; i++)
+{
+x[i]=b[i];
+for (int j=0; j<i; j++)
+{
+x[i]-=x[j]*A[i][j];
+}
+x[i]=x[i]/A[i][i];
+}
 }
 
 
@@ -29,8 +38,9 @@ void resol_trig_sup( float A[MAX][MAX] , float x[MAX], float b[MAX],int n) {
 
 void afficher_vect( float x[MAX],int n) {
 	int i;
-	for (i=0;i<n;i++) printf("%1f\n",x[i]);
+	for (i=0;i<n;i++) printf("%4.2f\n",x[i]);
 }
+
 
 void afficher_mat(float A[MAX][MAX] , int n) {
 	int i,j;
@@ -55,7 +65,7 @@ void remplir_vect( float x[MAX],int n) {
 
 void remplir_mat(float A[MAX][MAX] , int n) {
 	int i,j;
-	
+
 	for (i=0;i<n;i++) {
 		for (j=0;j<n;j++) {
 		printf("valeur [%d][%d] : ",i+1,j+1);
@@ -67,40 +77,52 @@ void remplir_mat(float A[MAX][MAX] , int n) {
 
 
 
+
 int main() {
 	int n;
-	float x[MAX],b[MAX],y[MAX];
+//	float x[MAX],b[MAX],y[MAX];
 
-	float A[MAX][MAX],L[MAX][MAX],U[MAX][MAX];
+//	float A[MAX][MAX],L[MAX][MAX],U[MAX][MAX];
 	
 	printf("Veuillez entrer la valeur de n : ");
-	if (scanf("%d",&n) !=1) printf("error");
+//	if (scanf("%d",&n) !=1) printf("error");
+	n=3;
+	float A[MAX][MAX]={
+			{1,0,0},	
+			{2,1,0},
+			{3,4,1}	
+				};
+
+	float b[MAX]={5,6,7};
+	float x[MAX],y[MAX];
 
 	printf("Veuillez remplir la matrice A : \n");
-	remplir_mat(A , n);
+//	remplir_mat_2(A , n);
+
 	afficher_mat(A,n);
 		
 	printf("Veuillez remplir le vecteur b : \n");
-	remplir_vect(b,n);
+//	remplir_vect_2(b,n);
 	afficher_vect(b,n);	
 	
-	/*
-	factoriser_LU(A,L,U,n);
-	printf("Matrice L : \n");
-	afficher_mat(L , n);
-	printf("Matrice U : \n");
-	afficher_mat(U , n);
+
+//	factoriser_LU(A,L,U,n);
+//	printf("Matrice L : \n");
+//	afficher_mat(L , n);
+//	printf("Matrice U : \n");
+//	afficher_mat(U , n);
 	
 	printf("Solution de Ly=b: \n");
-	resol_trig_inf( L,y,b ,n);
+	resol_trig_inf( A,y,b ,n);
+//	resol_trig_inf( L,y,b ,n);
 	afficher_vect(y,n);	
 	
 	
-	printf("Solution de Ux=y: \n");
-	resol_trig_sup( U,x,y ,n);
-	afficher_vect(x,n);
+//	printf("Solution de Ux=y: \n");
+//	resol_trig_sup( U,x,y ,n);
+//	afficher_vect(x,n);
 	
-	*/
+	//*/
 	
 
 
