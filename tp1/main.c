@@ -137,7 +137,7 @@ int main() {
 	
 	printf("Veuillez entrer la valeur de n : ");
 //	if (scanf("%d",&n) !=1) printf("error");
-	n=700;
+	n=3;
 	float A[MAX][MAX]={{1,2,3},{2,5,10},{3,10,26}};
 //	float A[MAX][MAX]={{1,2,3},{0,1,4},{0,0,1}};
 //	float A[MAX][MAX]={{1,0,0},{2,1,0},{3,4,1}};
@@ -146,31 +146,31 @@ int main() {
 
 	printf("Veuillez remplir la matrice A : \n");
 //	remplir_mat_2(A , n);
-	remplir_mat_rand(A , n);
+//	remplir_mat_rand(A , n);
 
-//	afficher_mat(A,n);
+	afficher_mat(A,n);
 		
 	printf("Veuillez remplir le vecteur b : \n");
 //	remplir_vect_2(b,n);
-//	afficher_vect(b,n);	
+	afficher_vect(b,n);	
 	
 
 	factoriser_LU(A,L,U,n);
 	printf("Matrice L : \n");
-//	afficher_mat(L , n);
+	afficher_mat(L , n);
 	printf("Matrice U : \n");
-//	afficher_mat(U , n);
+	afficher_mat(U , n);
 	
 	printf("Solution de Ly=b: \n");
 //	resol_trig_inf( A,y,b ,n);
-//	resol_trig_inf( L,y,b ,n);
-//	afficher_vect(y,n);	
+	resol_trig_inf( L,y,b ,n);
+	afficher_vect(y,n);	
 	
 	
 	printf("Solution de Ux=y: \n");
 //	resol_trig_sup( A,x,b ,n);
-//	resol_trig_sup( U,x,y ,n);
-//	afficher_vect(x,n);
+	resol_trig_sup( U,x,y ,n);
+	afficher_vect(x,n);
 	
 	//*/
 	
