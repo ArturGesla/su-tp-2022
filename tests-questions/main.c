@@ -53,6 +53,19 @@ void resol_trig_inf(const float A[MAX][MAX], float x[MAX], const float b[MAX], i
 	}
 }
 
+void toto(const float A[MAX][MAX], const float b[], const float u[], float r[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		r[i] = 0;
+		for (int j = 0; j < n; j++)
+		{
+			r[i] += -A[i][j] * u[j];
+		}
+		r[i] += b[i];
+	}
+}
+
 void resol_trig_sup(float A[MAX][MAX], float x[MAX], float b[MAX], int n)
 {
 	// la remontée à faire
@@ -162,7 +175,6 @@ void calculateM(const float A[MAX][MAX], float M[MAX][MAX], int n)
 		for (int j = 0; j < i; j++)
 		{
 			//  M[i][j] = +A[i][j];
-
 		}
 	}
 }
@@ -191,8 +203,8 @@ float norm(const float r[MAX], int n)
 }
 
 void solveIter(const float A[MAX][MAX],
-				   const float b[MAX], float u[MAX],
-				   int n, float eps, int nsteps)
+			   const float b[MAX], float u[MAX],
+			   int n, float eps, int nsteps)
 {
 	float r[MAX];
 	float M[MAX][MAX];
@@ -274,6 +286,7 @@ int main()
 	printf("Solution de Ux=y: \n");
 	//	resol_trig_sup( A,x,b ,n);
 	resol_trig_sup(U, x, y, n);
+	// resol_trig_sup(U, A, y, n);
 	afficher_vect(x, n);
 
 	//*/

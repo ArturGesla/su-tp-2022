@@ -1,0 +1,5 @@
+set title "u from diff-equation"
+set xlabel "x";
+set grid;
+plot "data.dat" u 1:2 w lp title "u"
+pause -1

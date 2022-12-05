@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define MAX 100
+#define MAX 500
 #include <time.h>
 
 // tp1
@@ -162,7 +162,6 @@ void calculateM(const float A[MAX][MAX], float M[MAX][MAX], int n)
 		for (int j = 0; j < i; j++)
 		{
 			//  M[i][j] = +A[i][j];
-
 		}
 	}
 }
@@ -191,8 +190,8 @@ float norm(const float r[MAX], int n)
 }
 
 void solveIter(const float A[MAX][MAX],
-				   const float b[MAX], float u[MAX],
-				   int n, float eps, int nsteps)
+			   const float b[MAX], float u[MAX],
+			   int n, float eps, int nsteps)
 {
 	float r[MAX];
 	float M[MAX][MAX];
@@ -227,8 +226,120 @@ void solveIter(const float A[MAX][MAX],
 	}
 	printf(" \n");
 }
+// project
+void matrixVectorProduct(int n, const float A[MAX][MAX], const float in[MAX], float out[MAX])
+{
+	for (int i = 0; i < n; i++)
+	{
+		out[i] = 0;
+		for (int j = 0; j < n; j++)
+		{
+			out[i] += A[i][j] * in[j];
+		}
+	}
+}
+void vectorAddition(int n, const float in[MAX], const float in2[MAX], float out[MAX])
+{
+	for (int i = 0; i < n; i++)
+	{
+		out[i] = in[i] + in2[i];
+	}
+}
+void setZero(int n, float b[MAX])
+{
+	for (int i = 0; i < n; i++)
+	{
+		b[i] = 0;
+	}
+}
+void setIC(int n, float b[MAX])
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (i < n / 2)
+		{
+			b[i] = 0;
+		}
+		else
+		{
+			b[i] = 1;
+		}
+	}
+}
+void constructC(int n, float A[MAX][MAX], float dt, float l)
+{
+	// float l = 1;
+	float dx = l / (n + 1);
 
+	A[0][0] = 1 - 2 * dt / dx / dx;
+	A[0][1] = 2*dt / dx / dx; //neu
+	// A[0][1] = dt / dx / dx; //dir
+	for (int i = 1; i < n-1; i++)
+	{
+		A[i][i] = 1 - 2 * dt / dx / dx;
+		A[i][i + 1] = dt / dx / dx;
+		A[i][i - 1] = dt / dx / dx;
+	}
+	A[n - 1][n - 1] = 1 - 2 * dt / dx / dx;
+	A[n - 1][n - 2] = 2 * dt / dx / dx; //neu
+	// A[n - 1][n - 2] = 1 * dt / dx / dx; //dir
+}
+void constructB(int n, float b[MAX], float dt, float dx)
+{
+	setZero(n, b);
+	// b[0] = 0*dt/dx/dx; //dir
+	b[0] = -2*2*dt/dx; //neu
+	// b[n - 1] = 2*dt/dx/dx; //dir
+	b[n - 1] = 2*2*dt/dx; //neu
+}
+
+void constructX(int n, float x[MAX], float xMin, float xMax)
+{
+	float dx = (xMax - xMin) / (n + 1);
+	for (int i = 0; i < n; i++)
+	{
+		x[i] = xMin + dx + i * dx;
+	}
+}
 int main()
+{
+	int n = 19;
+	float dt = 1e-1;
+	float xMin = -10;
+	float xMax = 10;
+	float dx = (xMax - xMin) / (n + 1);
+	//	float x[MAX],b[MAX],y[MAX];
+	float u[MAX], b[MAX], x[MAX];
+	float C[MAX][MAX];
+	// setZero(n,u);
+	setIC(n, u);
+
+	constructC(n, C, dt, xMax - xMin);
+	constructB(n, b,dt,dx);
+	constructX(n, x, xMin, xMax);
+
+	int nt = 40/dt;
+
+	for (int it = 0; it < nt; it++)
+	{
+		float work1[MAX], work2[MAX];
+		matrixVectorProduct(n, C, u, work1);
+		vectorAddition(n, work1, b, u);
+		printf("t: %4.4f \t iter: %d \t D: %4.6f \t norm: %4.4f \n", it * dt+dt, it, dt / dx / dx, norm(u, n) * sqrtf(dx));
+	}
+
+	// save result
+	FILE *fptr;
+	fptr = fopen("data.dat", "w");
+	for (int i = 0; i < n; i++)
+	{
+		fprintf(fptr, "%1.17e\t\t", x[i]);
+		fprintf(fptr, "%1.17e\n", u[i]);
+	}
+
+	fclose(fptr);
+}
+int mainTP()
 {
 	int n;
 	//	float x[MAX],b[MAX],y[MAX];
