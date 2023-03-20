@@ -1,5 +1,5 @@
-nx=5;
-ny=4;
+nx=3;
+ny=2;
 nn=nx*ny;
 A=zeros(nn);
 b=zeros(nn,1);
