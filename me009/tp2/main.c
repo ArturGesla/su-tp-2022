@@ -202,7 +202,7 @@ int main()
     printf("QH = %f, QV = %2.8e\n", QH, fluxV4Dirichlet(Q, nx, ny, h));
 
     fclose(fichier);
-    int nmodes = 60;
+    int nmodes = 100;
     float nmDiff=diffWithAnalytical(Q, nn, nx, ny, h, nmodes);
     ecriture(Q, P, x, y, nx, ny, h, gs, gw, ge, gn);
     printf("norm of diff with analytical %4.2e\n", nmDiff);

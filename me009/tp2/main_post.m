@@ -25,7 +25,8 @@ l=1.25;
 L=1.5;
 
 b0=1/2*l/L;
-bn=@(k)2/l/sinh(k*pi)*l^2/k/k/pi/pi*(-1+(-1)^k);
+% bn=@(k)2/l/sinh(k*pi)*l^2/k/k/pi/pi*(-1+(-1)^k);
+bn=@(k)2/l*l^2/k/k/pi/pi*(-1+(-1)^k);
 
 % nx=5; ny=4;
 nx=23; ny=19;
@@ -35,12 +36,12 @@ nx=23; ny=19;
 % x=1.25;
 % y=x;
 T=b0*x;
-nmodes=5;
+nmodes=100;
 for i=1:nmodes
-    T=T+bn(i).*cos(y*i*pi/l).*sinh(i*pi/l*x);
+    T=T+bn(i).*cos(y*i*pi/l).*sinh(i*pi/l*x)./sinh(i*pi*L/l);
 end
 subplot(1,2,1);
-% contour(x,y,T,20); colorbar();
+contour(x,y,T,20); colorbar();
 contour(x(:,2:end-1),y(:,2:end-1),T(:,2:end-1),20); colorbar();
 
 a=importdata("isoP_sor.dat")'; n=length(a);%nx=30; ny=25;
@@ -48,11 +49,11 @@ a=importdata("isoP_sor.dat")'; n=length(a);%nx=30; ny=25;
 % h=[h,1.5/(n+1)]
 % nm=[nm,norm(a,"fro")*1.5/(n+1)]
 subplot(1,2,2)
-% contour(x(:,2:end-1),y(:,2:end-1),a,20); colorbar();
+contour(x(:,2:end-1),y(:,2:end-1),a,20); colorbar();
 close all;
-% mesh(T(:,2:end-1)-a)
+mesh(T(:,2:end-1)-a)
 % mesh(t1-T)
-mesh(T)
+% mesh(T)
 
 %% etu
 a=importdata("isoP_sor.dat");

@@ -122,21 +122,21 @@ float diffWithAnalytical(float Q[], int nn, int nx, int ny, float h, int modes)
             float analytical = 1/2.0*l/L*x;
             float pi=3.14159265359;
             for (int i = 1; i < modes; i++)
-            // {
-            //     float bn=2.0/l/sinh(i*pi)*l*l/i/i/pi/pi*(pow(-1,i)-1);
-            //     printf("current bn: %4.2e\n",bn );
-            //     analytical+=bn*cos(y*i*pi/l)*sinh(i*pi*x/l);
-            // }
             {
-                float bn=2.0/l*l*l/i/i/pi/pi*(pow(-1,i)-1);
-                printf("current bn: %4.2e\n",bn );
-                analytical+=bn*cos(y*i*pi/l)*exp(i*pi*(x/l-1));
+                float bn=2.0/l/sinh(i*pi*L/l)*l*l/i/i/pi/pi*(pow(-1,i)-1);
+                // printf("current bn: %4.2e\n",bn );
+                analytical+=bn*cos(y*i*pi/l)*sinh(i*pi*x/l);
             }
+            // {
+            //     float bn=2.0/l*l*l/i/i/pi/pi*(pow(-1,i)-1);
+            //     printf("current bn: %4.2e\n",bn );
+            //     analytical+=bn*cos(y*i*pi/l)*exp(i*pi*(x/l-1));
+            // }
             //trzebaby tu pomyslec
-            Q[ix+iy*nx]=analytical;
+            // Q[ix+iy*nx]=analytical;
                         // Q[ix+iy*nx]=Q[ix+iy*nx]-analytical;
 
-            printf("Diff at ix %d iy %d is %4.2e\n",ix,iy,Q[ix+iy*nx]-analytical);
+            // printf("Diff at ix %d iy %d is %4.2e\n",ix,iy,Q[ix+iy*nx]-analytical);
                      normDiff+=   (Q[ix+iy*nx]-analytical)*(Q[ix+iy*nx]-analytical)/nx/ny;
 
             
