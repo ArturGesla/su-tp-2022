@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <math.h>
 #include "functions.h"
-#define MAX 10000
-#define NMAX 100
+#define MAX 160000
+#define NMAX 400
 
 float norme2_vect(float x[MAX], int n)
 {
     float var = 0;
     int i;
     for (i = 0; i < n; i++)
-        var += (x[i] * x[i]);
+        // var += (x[i] * x[i]);
+        var += (x[i] * x[i] / n);
 
     return sqrt(var);
 }
@@ -55,12 +56,10 @@ void ecriture(float Q[MAX], float P[NMAX][NMAX], float x[NMAX], float y[NMAX],
     {
         for (int iy = 0; iy < ny; iy++)
         {
-            fprintf(fichier1,"%4.8f\t",Q[nx*iy+ix]);
+            fprintf(fichier1, "%4.8f\t", Q[nx * iy + ix]);
         }
-        fprintf(fichier1,"\n");
-        
+        fprintf(fichier1, "\n");
     }
-    
 
     fclose(fichier1);
 }
@@ -69,9 +68,21 @@ int main()
 {
 
     // Discretisation
-    int nx = 50, ny = 40, nn = nx * ny;
-    //  int nx = 30, ny = 25, nn = nx * ny;
-    //    int nx = 95, ny = 79, nn = nx * ny;
+
+    // int nx = 5, ny = 4, nn = nx * ny;
+
+    // int nx = 11, ny = 9, nn = nx * ny;
+
+    // int nx = 23, ny = 19, nn = nx * ny;
+
+    // int nx = 47, ny = 39, nn = nx * ny;
+
+       int nx = 95, ny = 79, nn = nx * ny;
+    //    three above give ration 3.72810099409025 of QV, not too bad
+
+    //  int nx = 191, ny = 159, nn = nx * ny;
+    //   int nx = 383, ny = 319, nn = nx * ny;
+
     float h = 1.5 / (nx + 1);
 
     // Conditions aux limites
@@ -82,8 +93,8 @@ int main()
     float As[MAX], Aw[MAX], Ap[MAX], Ae[MAX], An[MAX], b[MAX], r[MAX];
 
     // Pour la r�solution SOR
-    int kmax = 5000, kech = 20;
-    float eps = 1.e-6, omega = 1.9, nores = 1.;
+    int kmax = 15000, kech = 20;
+    float eps = 2e-7, omega = 1.8, nores = 1.;
     float Q[MAX], dQ[MAX];
 
     // Champ solution 2D
@@ -105,7 +116,11 @@ int main()
     // et du second membre
 
     // A compl�ter
-    remplirDirichlet(An, As, Ap, Ae, Aw, b, nn, nx, ny, gs, ge, gw, gn);
+    // remplirDirichlet(An, As, Ap, Ae, Aw, b, nn, nx, ny, gs, ge, gw, gn);
+    ny = ny + 2;
+    nn = nx * ny;
+    remplirNeumann(An, As, Ap, Ae, Aw, b, nn, nx, ny, gs, ge, gw, gn, h);
+
     // Prise en compte des conditions aux limites
 
     // A compl�ter
@@ -134,18 +149,18 @@ int main()
             printf("%.1f, ", An[i]);
         printf("\n");
         for (int i = 0; i < nn; i++)
-            printf("%.1f, ", b[i]);
+            printf("%4.4f, ", b[i]);
         printf("\n");
     }
 
     // R�solution par SOR
 
     // Initialisation
-    initQ( Q,nn);
+    initQ(Q, nn);
     // A compl�ter
 
     // Boucle conditionnelle
-    while (nores > eps /*� completer*/ && k<5000)
+    while (nores > eps /*� completer*/ && k < kmax)
     {
 
         // A compl�ter
@@ -158,14 +173,14 @@ int main()
         {
             printf("k = %d, r�sidu = %e\n", k, nores);
             // fprintf(fichier, "k = %d, r�sidu = %e\n", k, nores);
-            fprintf(fichier,"%d\t %e\n", k, nores);
+            fprintf(fichier, "%d\t %e\n", k, nores);
             /*k d�signe ici le nombre d'it�rations, nores d�signe ici la norme du r�sidue*/
         }
 
         // A compl�ter
         k++;
     }
-            fprintf(fichier,"%d\t %e\n", k, nores);
+    fprintf(fichier, "%d\t %e\n", k, nores);
 
     printf("converegnce en k = %d iterations, r�sidu = %e\n", k, nores);
     // fprintf(fichier, "converegnce en k = %d iterations, r�sidu = %e\n", k, nores);
@@ -184,9 +199,13 @@ int main()
     // A compl�ter
 
     printf("IH = %f, IV = %f\n", IH, IV);
-    printf("QH = %f, QV = %f\n", QH, QV);
+    printf("QH = %f, QV = %2.8e\n", QH, fluxV4Dirichlet(Q, nx, ny, h));
 
     fclose(fichier);
+    int nmodes = 60;
+    float nmDiff=diffWithAnalytical(Q, nn, nx, ny, h, nmodes);
+    ecriture(Q, P, x, y, nx, ny, h, gs, gw, ge, gn);
+    printf("norm of diff with analytical %4.2e\n", nmDiff);
 
     return 0;
 }
